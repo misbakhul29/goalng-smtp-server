@@ -34,7 +34,7 @@ const apiDocsHTML = `
     </div>
 
     <h3>Authentication</h3>
-    <p>All requests must include an API key in the headers.</p>
+    <p>All requests must include an API key in the headers. To request an API key, please email <a href="mailto:misbakhul2904@gmail.com">misbakhul2904@gmail.com</a>.</p>
     <table>
         <tr><th>Header</th><th>Description</th></tr>
         <tr><td><code>X-API-Key</code></td><td>Your secret API key (required)</td></tr>

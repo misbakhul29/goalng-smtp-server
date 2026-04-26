@@ -30,6 +30,7 @@ func main() {
 	rateLimiter := middleware.NewRateLimiter(5, time.Minute)
 
 	mux := http.NewServeMux()
+	mux.HandleFunc("/", handler.Home())
 	mux.HandleFunc("/api/send-email", middleware.APIKeyAuth(cfg.APIKey, rateLimiter.Limit(mailHandler.SendEmail)))
 	mux.HandleFunc("/health", func(w http.ResponseWriter, r *http.Request) {
 		w.WriteHeader(http.StatusOK)
