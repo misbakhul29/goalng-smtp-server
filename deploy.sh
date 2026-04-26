@@ -66,6 +66,12 @@ fi
 DEPLOY_DIR="/opt/$BINARY_NAME"
 log "Creating deploy directory: $DEPLOY_DIR"
 mkdir -p "$DEPLOY_DIR"
+
+if command -v pm2 &>/dev/null && pm2 describe "$BINARY_NAME" &>/dev/null; then
+  warn "Stopping running service before file copy..."
+  pm2 stop "$BINARY_NAME" || true
+fi
+
 cp "$BINARY_NAME" "$DEPLOY_DIR/"
 cp .env "$DEPLOY_DIR/"
 [ -f ecosystem.config.js ] && cp ecosystem.config.js "$DEPLOY_DIR/"
