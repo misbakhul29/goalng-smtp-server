@@ -19,7 +19,7 @@ const apiDocsHTML = `
         code { font-family: ui-monospace, SFMono-Regular, Consolas, "Liberation Mono", Menlo, monospace; font-size: 0.9em; background: #f8f9fa; padding: 0.2em 0.4em; border-radius: 3px; }
         .endpoint { background: #e8f4f8; padding: 1rem; border-radius: 4px; border-left: 4px solid #3498db; margin-bottom: 2rem; }
         .method { font-weight: bold; color: #fff; background: #2ecc71; padding: 0.3rem 0.6rem; border-radius: 4px; margin-right: 0.5rem; }
-        table { width: 100%; border-collapse: collapse; margin: 1rem 0; }
+        table { width: 100%%; border-collapse: collapse; margin: 1rem 0; }
         th, td { text-align: left; padding: 0.75rem; border-bottom: 1px solid #dee2e6; }
         th { background: #f8f9fa; }
     </style>
