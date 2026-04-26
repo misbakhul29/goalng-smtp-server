@@ -35,6 +35,7 @@ func main() {
 		w.WriteHeader(http.StatusOK)
 		w.Write([]byte(`{"status":"ok"}`))
 	})
+	mux.HandleFunc("/docs/api", handler.APIDocs)
 
 	addr := fmt.Sprintf(":%s", cfg.ServerPort)
 	log.Printf("server starting on %s", addr)
