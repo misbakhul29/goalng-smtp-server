@@ -12,6 +12,7 @@ type Config struct {
 	SMTPEmail    string
 	SMTPPassword string
 	ServerPort   string
+	APIKey       string
 }
 
 func Load() (*Config, error) {
@@ -31,6 +32,7 @@ func Load() (*Config, error) {
 		SMTPEmail:    requireEnv("SMTP_EMAIL"),
 		SMTPPassword: requireEnv("SMTP_PASSWORD"),
 		ServerPort:   getEnvOrDefault("SERVER_PORT", "8080"),
+		APIKey:       requireEnv("API_KEY"),
 	}
 
 	return cfg, nil
