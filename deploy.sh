@@ -25,8 +25,16 @@ if [ "$EUID" -ne 0 ]; then
   error "Please run as root or with sudo"
 fi
 
-read -rp "Enter your domain or server IP (e.g. api.example.com): " DOMAIN
-[ -z "$DOMAIN" ] && error "Domain/IP cannot be empty"
+if [ ! -f ".env" ]; then
+  warn ".env file not found. Copying from .env.example..."
+  [ -f ".env.example" ] && cp .env.example .env || error ".env.example not found either. Create a .env file first."
+  warn "Please edit .env with your real credentials, then re-run this script."
+  exit 1
+fi
+
+DOMAIN=$(grep -E "^APP_DOMAIN=" .env | cut -d '=' -f2- | tr -d '"'\')
+[ -z "$DOMAIN" ] && error "APP_DOMAIN is not set in .env. Please set it before deploying."
+log "Using domain from .env: $DOMAIN"
 
 read -rp "Enable HTTPS with Let's Encrypt? (requires a valid domain) [y/N]: " ENABLE_SSL
 ENABLE_SSL="${ENABLE_SSL,,}"
@@ -56,12 +64,7 @@ log "Building Go binary..."
 go build -o "$BINARY_NAME" ./cmd/server/main.go
 log "Binary built: ./$BINARY_NAME"
 
-if [ ! -f ".env" ]; then
-  warn ".env file not found. Copying from .env.example..."
-  [ -f ".env.example" ] && cp .env.example .env || error ".env.example not found either. Create a .env file first."
-  warn "Please edit .env with your real credentials, then re-run this script."
-  exit 1
-fi
+# .env check has been moved to the top of the script
 
 DEPLOY_DIR="/opt/$BINARY_NAME"
 log "Creating deploy directory: $DEPLOY_DIR"

@@ -1,6 +1,7 @@
 package handler
 
 import (
+	"fmt"
 	"net/http"
 )
 
@@ -49,7 +50,7 @@ const apiDocsHTML = `
     </table>
 
     <h4>Example Request</h4>
-    <pre><code>curl -X POST https://yourdomain.com/api/send-email \
+    <pre><code>curl -X POST https://%s/api/send-email \
   -H "Content-Type: application/json" \
   -H "X-API-Key: your_api_key_here" \
   -d '{
@@ -77,7 +78,7 @@ const apiDocsHTML = `
     </div>
     
     <h4>Example Request</h4>
-    <pre><code>curl https://yourdomain.com/health</code></pre>
+    <pre><code>curl https://%s/health</code></pre>
 
     <h4>Example Response</h4>
     <pre><code>{"status":"ok"}</code></pre>
@@ -86,8 +87,10 @@ const apiDocsHTML = `
 </html>
 `
 
-func APIDocs(w http.ResponseWriter, r *http.Request) {
-	w.Header().Set("Content-Type", "text/html; charset=utf-8")
-	w.WriteHeader(http.StatusOK)
-	w.Write([]byte(apiDocsHTML))
+func APIDocs(domain string) http.HandlerFunc {
+	return func(w http.ResponseWriter, r *http.Request) {
+		w.Header().Set("Content-Type", "text/html; charset=utf-8")
+		w.WriteHeader(http.StatusOK)
+		w.Write([]byte(fmt.Sprintf(apiDocsHTML, domain, domain)))
+	}
 }

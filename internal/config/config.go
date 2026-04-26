@@ -13,6 +13,7 @@ type Config struct {
 	SMTPPassword string
 	ServerPort   string
 	APIKey       string
+	AppDomain    string
 }
 
 func Load() (*Config, error) {
@@ -33,6 +34,7 @@ func Load() (*Config, error) {
 		SMTPPassword: requireEnv("SMTP_PASSWORD"),
 		ServerPort:   getEnvOrDefault("SERVER_PORT", "8080"),
 		APIKey:       requireEnv("API_KEY"),
+		AppDomain:    getEnvOrDefault("APP_DOMAIN", "localhost:8080"),
 	}
 
 	return cfg, nil
