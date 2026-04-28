@@ -1,9 +1,10 @@
 package model
 
 type MailRequest struct {
-	SenderEmail string `json:"sender_email"`
-	Subject     string `json:"subject"`
-	Message     string `json:"message"`
+	Sender  string `json:"sender"`
+	SendTo  string `json:"send_to"`
+	Subject string `json:"subject"`
+	Email   string `json:"email"`
 }
 
 type MailResponse struct {

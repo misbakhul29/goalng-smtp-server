@@ -31,7 +31,7 @@ const apiDocsHTML = `
 
     <div class="endpoint">
         <h2><span class="method">POST</span> /api/send-email</h2>
-        <p>Sends an email to the configured portfolio owner's email address.</p>
+        <p>Sends an email to the specified destination email address.</p>
     </div>
 
     <h3>Authentication</h3>
@@ -45,9 +45,10 @@ const apiDocsHTML = `
     <p>The request body must be JSON and include the following fields:</p>
     <table>
         <tr><th>Field</th><th>Type</th><th>Description</th></tr>
-        <tr><td><code>sender_email</code></td><td>string</td><td>Valid email address of the sender</td></tr>
+        <tr><td><code>sender</code></td><td>string</td><td>Valid email address of the sender</td></tr>
+        <tr><td><code>send_to</code></td><td>string</td><td>Valid email address to send to</td></tr>
         <tr><td><code>subject</code></td><td>string</td><td>Email subject (cannot be empty)</td></tr>
-        <tr><td><code>message</code></td><td>string</td><td>Email body content (cannot be empty)</td></tr>
+        <tr><td><code>email</code></td><td>string</td><td>Email body content (cannot be empty)</td></tr>
     </table>
 
     <h4>Example Request</h4>
@@ -55,16 +56,17 @@ const apiDocsHTML = `
   -H "Content-Type: application/json" \
   -H "X-API-Key: your_api_key_here" \
   -d '{
-    "sender_email": "test@example.com",
+    "sender": "test@example.com",
+    "send_to": "receiver@example.com",
     "subject": "Hello",
-    "message": "I want to work with you"
+    "email": "I want to work with you"
   }'</code></pre>
 
     <h3>Responses</h3>
     <table>
         <tr><th>Status</th><th>Description</th><th>Body</th></tr>
         <tr><td><code>200 OK</code></td><td>Email sent successfully</td><td><code>{"message": "Email sent successfully"}</code></td></tr>
-        <tr><td><code>400 Bad Request</code></td><td>Validation failed</td><td><code>{"error": "sender_email is not a valid email address"}</code></td></tr>
+        <tr><td><code>400 Bad Request</code></td><td>Validation failed</td><td><code>{"error": "sender is not a valid email address"}</code></td></tr>
         <tr><td><code>401 Unauthorized</code></td><td>Missing API key</td><td><code>{"error": "missing X-API-Key header"}</code></td></tr>
         <tr><td><code>403 Forbidden</code></td><td>Invalid API key</td><td><code>{"error": "invalid API key"}</code></td></tr>
         <tr><td><code>429 Too Many Requests</code></td><td>Rate limit exceeded (5 req/min)</td><td><code>{"error": "too many requests, please slow down"}</code></td></tr>

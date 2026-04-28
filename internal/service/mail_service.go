@@ -24,10 +24,10 @@ func NewMailService(cfg *config.Config) MailService {
 }
 
 func (s *mailService) Send(req *model.MailRequest) error {
-	subject := fmt.Sprintf("[Portfolio Contact] %s", sanitize(req.Subject))
-	body := buildBody(req.SenderEmail, req.Message)
+	subject := sanitize(req.Subject)
+	body := buildBody(req.Sender, req.Email)
 
-	headers := buildHeaders(s.cfg.SMTPEmail, s.cfg.SMTPEmail, req.SenderEmail, subject)
+	headers := buildHeaders(s.cfg.SMTPEmail, req.SendTo, req.Sender, subject)
 	raw := headers + "\r\n" + body
 
 	addr := fmt.Sprintf("%s:%d", s.cfg.SMTPHost, s.cfg.SMTPPort)
@@ -35,7 +35,7 @@ func (s *mailService) Send(req *model.MailRequest) error {
 
 	done := make(chan error, 1)
 	go func() {
-		done <- smtp.SendMail(addr, auth, s.cfg.SMTPEmail, []string{s.cfg.SMTPEmail}, []byte(raw))
+		done <- smtp.SendMail(addr, auth, s.cfg.SMTPEmail, []string{req.SendTo}, []byte(raw))
 	}()
 
 	select {
@@ -43,7 +43,7 @@ func (s *mailService) Send(req *model.MailRequest) error {
 		if err != nil {
 			return fmt.Errorf("smtp send failed: %w", err)
 		}
-		log.Printf("email sent successfully | from=%s subject=%q", req.SenderEmail, req.Subject)
+		log.Printf("email sent successfully | from=%s to=%s subject=%q", req.Sender, req.SendTo, req.Subject)
 		return nil
 	case <-time.After(15 * time.Second):
 		return fmt.Errorf("smtp send timed out after 15 seconds")
@@ -61,11 +61,11 @@ func buildHeaders(from, to, replyTo, subject string) string {
 	}, "\r\n")
 }
 
-func buildBody(senderEmail, message string) string {
+func buildBody(sender, email string) string {
 	return fmt.Sprintf(
-		"You received a new message from your portfolio:\r\n\r\nFrom: %s\r\n\r\nMessage:\r\n%s",
-		senderEmail,
-		message,
+		"From: %s\r\n\r\nMessage:\r\n%s",
+		sender,
+		email,
 	)
 }
 

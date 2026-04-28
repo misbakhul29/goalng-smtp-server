@@ -46,14 +46,17 @@ func (h *MailHandler) SendEmail(w http.ResponseWriter, r *http.Request) {
 }
 
 func validate(req *model.MailRequest) string {
-	if _, err := mail.ParseAddress(req.SenderEmail); err != nil {
-		return "sender_email is not a valid email address"
+	if _, err := mail.ParseAddress(req.Sender); err != nil {
+		return "sender is not a valid email address"
+	}
+	if _, err := mail.ParseAddress(req.SendTo); err != nil {
+		return "send_to is not a valid email address"
 	}
 	if strings.TrimSpace(req.Subject) == "" {
 		return "subject must not be empty"
 	}
-	if strings.TrimSpace(req.Message) == "" {
-		return "message must not be empty"
+	if strings.TrimSpace(req.Email) == "" {
+		return "email must not be empty"
 	}
 	return ""
 }
